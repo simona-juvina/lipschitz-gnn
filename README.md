@@ -1,106 +1,138 @@
-## Training Graph Neural Networks Subject to a Tight Lipschitz Constraint
+# Lipschitz-GNN
 
-We propose a strategy for training a wide range of graph neural networks (GNNs) under tight Lipschitz bound constraints. We proposed a constrained-optimization approach to control the constant, ensuring robustness to adversarial perturbations. We focus on defending against attacks that perturb features while keeping the topology of the graph constant. 
+Official implementation of the paper:
 
-### Examples of running the scripts for the Facebook dataset, for the GCN architecture:
-#### Training the models:
-Training the baseline and Lipschitz-constrained models:
-```
-python main_train_models.py -db FacebookPagePage -nt gcn -wd 0.0005 -ct full 
-```
-Training models with the non-negativity constraint:
-```
-python main_train_models.py -db FacebookPagePage -nt gcn -wd 0.0005 -ct positive 
-```
-Training the SN models:
-```
-python main_train_models.py -db FacebookPagePage -nt gcn -wd 0.0005 -ct spectral 
-```
-Training the RS models:
-```
-python main_train_models_RS.py -db FacebookPagePage -nt gcn -wd 0.0005
-```
-Training the AT models:
-```
-python main_train_models_AT.py -db FacebookPagePage -nt gcn -wd 0.0005
-```
+**Training Graph Neural Networks Subject to a Tight Lipschitz Constraint**  
+Simona Ioana Juvina, Ana Antonia Neacsu, Jerome Rony, Jean-Christophe Pesquet, Corneliu Burileanu, Ismail Ben Ayed  
+*Transactions on Machine Learning Research*, 2024
 
-#### Evaluate the robustness of the models:
+This repository contains code for training and evaluating the robustness of graph neural networks under tight Lipschitz constraints. It includes training scripts for baseline models, Lipschitz-constrained models, spectral-normalized models, adversarially trained models, randomized smoothing baselines, and graph-defense methods, together with attack and plotting utilities.
 
-Evaluate the robustness of the baseline and Lipschitz-constrained models:
-- $L_2$ APGD-DL attack
-```
-python main_attack_models.py -db FacebookPagePage -nt gcn -a apgd_l2_dl -f results_attacks_apgd_l2_dl_lipschitz.csv
-```
-- $L_{inf}$ APGD-DL attack
-```
-python main_attack_models.py -db FacebookPagePage -nt gcn -a apgd_linf -f results_attacks_apgd_linf_lipschitz.csv -el 0.01 0.05 0.1 0.2 0.3 0.5 0.7 1 
-```
-Evaluate the robustness of the models with the non-negativity constraint:
-```
-python main_attack_models.py -db FacebookPagePage -nt gcn -ct positive -a apgd_l2_dl -f results_attacks_apgd_l2_dl_lipschitz_positive.csv 
-```
-Evaluate the robustness of the SN models:
-```
-python main_attack_models.py -db FacebookPagePage -nt gcn -ct spectral -a apgd_l2_dl -f results_attacks_apgd_l2_dl_SN.csv 
-```
-Evaluate the robustness of the RS models:
-- $L_2$ APGD-DL attack
-```
-python main_attack_models_RS.py -db FacebookPagePage -nt gcn -a apgd_l2_dl -f results_attacks_apgd_l2_dl_RS.csv 
-```
-- $L_{inf}$ APGD-DL attack
-```
-python main_attack_models_RS.py -db FacebookPagePage -nt gcn -a apgd_linf -f results_attacks_apgd_linf_RS.csv -el 0.01 0.05 0.1 0.2 0.3 0.5 0.7 1 
-```
-Evaluate the robustness of the AT models:
-- $L_2$ APGD-DL attack
-```
-python main_attack_models_AT.py -db FacebookPagePage -nt gcn -a apgd_l2_dl -f results_attacks_apgd_l2_dl_AT.csv 
-```
-- $L_{inf}$ APGD-DL attack
-```
-python main_attack_models_AT.py -db FacebookPagePage -nt gcn -a apgd_linf -f results_attacks_apgd_linf_AT.csv -el 0.01 0.05 0.1 0.2 0.3 0.5 0.7 1 
-```
-Train and evaluate the robustness of SVD-GCN, GCN-Jaccard, RGCN:
-```
-python main_train_attack_graph_defenses.py -wd 0.0005 -a apgd_l2_dl -db FacebookPagePage -nt svd     -f results_attacks_apgd_l2_dl_svd.csv
-python main_train_attack_graph_defenses.py -wd 0.0005 -a apgd_l2_dl -db FacebookPagePage -nt jaccard -f results_attacks_apgd_l2_dl_jaccard.csv
-python main_train_attack_graph_defenses.py -wd 0.0005 -a apgd_l2_dl -db FacebookPagePage -nt rgcn    -f results_attacks_apgd_l2_dl_rgcn.csv
-```
-Evaluate the efficiency of different attacks:
-```
-python main_attack_models.py -db FacebookPagePage -nt gcn -a apgd_l2_dlr -f results_attacks_apgd_l2_dlr_lipschitz.csv 
-python main_attack_models.py -db FacebookPagePage -nt gcn -a apgd_l2_ce  -f results_attacks_apgd_l2_ce_lipschitz.csv 
-python main_attack_models.py -db FacebookPagePage -nt gcn -a pgd_l2_dlr  -f results_attacks_pgd_l2_dlr_lipschitz.csv 
-python main_attack_models.py -db FacebookPagePage -nt gcn -a pgd_l2_ce   -f results_attacks_pgd_l2_ce_lipschitz.csv 
-python main_attack_models.py -db FacebookPagePage -nt gcn -a pgd_l2_dl   -f results_attacks_pgd_l2_dl_lipschitz.csv
+## Overview
+
+This repository provides:
+
+- training code for standard and Lipschitz-constrained graph neural networks;
+- implementations of positivity constraints, spectral normalization, randomized smoothing, adversarial training, and graph-defense baselines;
+- robustness evaluation under PGD and APGD attacks;
+- plotting utilities for accuracy-robustness trade-off curves;
+- scripts for reproducing the main experimental comparisons from the paper.
+
+## Project Layout
+
+```text
+.
+|-- scripts/                   # Runnable experiment entry points
+|   `-- README.md              # Detailed script usage and experiment commands
+|-- src/lipschitz_gnn/          # Reusable package code
+|   |-- attacks/                # PGD/APGD attacks and attack metrics
+|   |-- constraints.py          # Lipschitz, positivity, and spectral constraints
+|   |-- early_stopping.py       # Early stopping callback
+|   |-- models.py               # GNN model definitions
+|   |-- plotting.py             # Plotting helpers
+|   |-- training.py             # Training and evaluation loops
+|   `-- utils.py                # Data loading, metrics, IO, Lipschitz helpers
+|-- environment.yml             # Conda environment definition
+|-- pyproject.toml              # Editable package and tooling configuration
+`-- README.md
 ```
 
-#### Plot the results:
-Accuracy - robustness tradeoff:
-```
-python main_plot_results.py -cl 28 11 3 -nl gcn -f results_attacks_apgd_l2_dl_lipschitz.csv
-```
-Robustness comparison - baseline, our method, RS, AT:
-- $L_2$ APGD-DL attacks
-```
-python main_plot_results.py -cl 11 -sl 0.6 -ael 150 -nl gcn -f results_attacks_apgd_l2_dl_lipschitz.csv -fa results_attacks_apgd_l2_dl_AT.csv -frs results_attacks_apgd_l2_dl_RS.csv
-```
-- $L_{inf}$ APGD-DL attack
-```
-python main_plot_results.py -cl 11 -sl 0.6 -ael 150 -nl gcn -f results_attacks_apgd_linf_lipschitz.csv -fa results_attacks_apgd_linf_AT.csv -frs results_attacks_apgd_linf_RS.csv
-```
-Robustness comparison - baseline, our method, SN:
-```
-python main_plot_results.py -cl 11 -snl 9 -f results_attacks_apgd_l2_dl_lipschitz.csv -fsn results_attacks_apgd_l2_dl_SN.csv
-```
-Robustness comparison - baseline, our method, SVD-GCN, GCN-Jaccard, RGCN:
-```
-python main_plot_results.py -cl 11 -jl 0 -svdl 30 -rl 0.1 -f results_attacks_apgd_l2_dl_lipschitz.csv -fj results_attacks_apgd_l2_dl_jaccard.csv -fr results_attacks_apgd_l2_dl_rgcn.csv -fsvd results_attacks_apgd_l2_dl_svd.csv
-```
-Comparison between different attacks:
-```
-python main_plot_results.py -cl 11 -nl gcn -fl results_attacks_apgd_l2_dl_lipschitz.csv results_attacks_apgd_l2_dlr_lipschitz.csv results_attacks_apgd_l2_ce_lipschitz.csv results_attacks_pgd_l2_dl_lipschitz.csv results_attacks_pgd_l2_dlr_lipschitz.csv results_attacks_pgd_l2_ce_lipschitz.csv 
+## Installation
+
+On a Linux machine with at least one CUDA-enabled NVIDIA GPU and Anaconda or Miniconda installed, run:
+
+```bash
+git clone https://github.com/simona-juvina/lipschitz-gnn.git
+cd lipschitz-gnn
+conda env create --file environment.yml
+conda activate robust_gnn
+pip install -e .
 ```
 
+Optional development tools can be installed with:
+
+```bash
+pip install -e ".[dev]"
+black src scripts
+ruff check src scripts
+```
+
+## Quick Start
+
+The following example trains a Lipschitz-constrained GCN on `FacebookPagePage`, evaluates it with APGD, and plots the resulting robustness curve.
+
+All commands should be run from the repository root after activating the conda environment.
+
+```bash
+# Train a Lipschitz-constrained GCN
+python scripts/main_train_models.py \
+  -db FacebookPagePage \
+  -nt gcn \
+  -wd 0.0005 \
+  -ct full
+
+# Evaluate robustness with APGD
+python scripts/main_attack_models.py \
+  -db FacebookPagePage \
+  -nt gcn \
+  -a apgd_l2_dl \
+  -f results_attacks_apgd_l2_dl_lipschitz.csv
+
+# Plot the accuracy-robustness trade-off
+python scripts/main_plot_results.py \
+  -cl 28 11 3 \
+  -nl gcn \
+  -f results_attacks_apgd_l2_dl_lipschitz.csv
+```
+
+For the full list of training, attack, graph-defense, randomized smoothing, adversarial training, and plotting commands, see [scripts/README.md](scripts/README.md).
+
+## Supported Experiment Types
+
+| Category | Supported methods |
+|---|---|
+| Standard training | Baseline GNN models |
+| Lipschitz-constrained training | Tight Lipschitz-constrained models |
+| Constraint variants | Full constraint, non-negative constraint, spectral normalization |
+| Robust training baselines | Adversarial training, randomized smoothing |
+| Graph-defense baselines | SVD, Jaccard, RGCN |
+| Attacks | PGD and APGD variants under `L2` and `L-infinity` perturbations |
+| Plotting | Accuracy and robustness trade-off curves |
+
+## Main Scripts
+
+| Script | Purpose |
+|---|---|
+| `scripts/main_train_models.py` | Train baseline, Lipschitz-constrained, non-negative, and spectral-normalized models |
+| `scripts/main_attack_models.py` | Evaluate baseline and constrained models under PGD/APGD attacks |
+| `scripts/main_train_models_RS.py` | Train randomized smoothing models |
+| `scripts/main_attack_models_RS.py` | Evaluate randomized smoothing models |
+| `scripts/main_train_models_AT.py` | Train adversarially trained models |
+| `scripts/main_attack_models_AT.py` | Evaluate adversarially trained models |
+| `scripts/main_train_attack_graph_defenses.py` | Train and evaluate graph-defense baselines |
+| `scripts/main_plot_results.py` | Generate accuracy-robustness plots |
+
+## Generated Outputs
+
+The scripts create output directories automatically when needed.
+
+| Output | Description |
+|---|---|
+| `saved_models/` | Trained model checkpoints |
+| `saved_history/` | Training histories and intermediate metrics |
+| `saved_figures/` | Generated plots |
+| `results_attacks_*.csv` | Robustness evaluation results used by the plotting scripts |
+
+## Citation
+
+If you use this code, please cite our paper:
+
+```bibtex
+@article{juvina2024training,
+  author  = {Juvina, Simona Ioana and Neac{\c{s}}u, Ana Antonia and Rony, J{\'e}r{\^o}me and Pesquet, Jean-Christophe and Burileanu, Corneliu and Ben Ayed, Ismail},
+  title   = {Training Graph Neural Networks Subject to a Tight Lipschitz Constraint},
+  journal = {Transactions on Machine Learning Research},
+  year    = {2024},
+  url     = {https://openreview.net/forum?id=KLojVqdj2y}
+}
+```

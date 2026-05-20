@@ -1,10 +1,12 @@
+"""Train randomized-smoothing GNN models."""
+
 import argparse
 import torch
 import os
 
 # user-defined modules
-from utils import load_dataset
-from train_model_utils import train_test_model
+from lipschitz_gnn.utils import load_dataset
+from lipschitz_gnn.training import train_test_model
 
 datasets      = ('FacebookPagePage', 'GitHub', 'LastFMAsia', 'DeezerEurope')
 networks      = ('gcn', 'sage')

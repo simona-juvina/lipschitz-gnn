@@ -1,5 +1,8 @@
+"""Train and attack graph-defense baselines such as SVD-GCN and RGCN."""
+
 import argparse
-import os, csv
+import csv
+import os
 import numpy as np
 import pandas as pd
 import torch
@@ -12,10 +15,10 @@ from functools import partial
 from deeprobust.graph.defense import GCNJaccard, GCNSVD, GCN, RGCN
 
 # user-defined modules
-from utils import load_dataset
-from attacks.pgd import pgd
-from attacks.apgd import apgd
-from attacks.utils import compute_attack_metrics, run_attack
+from lipschitz_gnn.utils import load_dataset
+from lipschitz_gnn.attacks.pgd import pgd
+from lipschitz_gnn.attacks.apgd import apgd
+from lipschitz_gnn.attacks.utils import compute_attack_metrics, run_attack
 
 
 def mask_to_index(mask):

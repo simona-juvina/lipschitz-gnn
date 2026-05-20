@@ -1,3 +1,5 @@
+"""Constraint callbacks for Lipschitz-controlled graph neural networks."""
+
 import torch
 import numpy as np
 from typing import Dict, Any, List
@@ -50,11 +52,11 @@ class Callback():
         pass
 
     
-class Constraint_SAGE(Callback):
+class ConstraintSAGE(Callback):
     """Callback for applying constraints to the SAGE model."""
 
     def __init__(self, model: torch.nn.Module, parameters: Dict[str, Any], device: torch.device, with_constraint: bool, constraint_type: str):
-        """Initialize the Constraint_SAGE callback.
+        """Initialize the ConstraintSAGE callback.
 
         Args:
             model (torch.nn.Module): The SAGE model.
@@ -167,11 +169,10 @@ class Constraint_SAGE(Callback):
         else:
             pass
 
-                
-                
-class Constraint_GCN(Callback):
+
+class ConstraintGCN(Callback):
     def __init__(self, model: torch.nn.Module, parameters: Dict[str, Any], device: torch.device, with_constraint: bool, constraint_type: str):
-        """Initialize the Constraint_GCN callback.
+        """Initialize the ConstraintGCN callback.
 
         Args:
             model (torch.nn.Module): The SAGE model.
@@ -293,3 +294,8 @@ class Constraint_GCN(Callback):
                     B = w @ B
         else:
             pass
+
+
+# Backwards-compatible aliases for code that imported the original class names.
+Constraint_SAGE = ConstraintSAGE
+Constraint_GCN = ConstraintGCN

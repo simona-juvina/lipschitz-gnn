@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lipschitz-gnn"
+version = "0.1.0"
+description = "Training and robustness evaluation for Lipschitz-constrained graph neural networks."
+readme = "README.md"
+requires-python = ">=3.10,<3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "adversarial-library @ git+https://github.com/jeromerony/adversarial-library",
+    "cupy-cuda117",
+    "deeprobust",
+    "matplotlib",
+    "networkx",
+    "numpy",
+    "pandas",
+    "pynvml",
+    "scikit-learn",
+    "scipy",
+    "seaborn",
+    "torchmetrics==0.10.*",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black>=24.0",
+    "ruff>=0.4",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "scripts"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501"]

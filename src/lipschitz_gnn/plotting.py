@@ -1,4 +1,6 @@
 import pandas as pd
+"""Plotting helpers for robustness and Lipschitz experiment results."""
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,7 +8,7 @@ import seaborn as sns
 from typing import Optional, List
 
 # user-defined modules
-from utils import get_loss_acc_f1, get_result_dict
+from lipschitz_gnn.utils import get_loss_acc_f1, get_result_dict
 
 SMALL_SIZE  = 8
 MEDIUM_SIZE = 12

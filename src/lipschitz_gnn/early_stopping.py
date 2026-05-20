@@ -1,9 +1,11 @@
 import numpy as np
+"""Early stopping utilities for model training."""
+
 import torch
 from torch import nn
 from typing import Dict, Any, Optional
 # user-defined modules
-from utils import get_Lips_constant
+from lipschitz_gnn.utils import get_Lips_constant
 
 
 class EarlyStopping:

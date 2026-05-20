@@ -1,3 +1,5 @@
+"""Evaluate robustness for baseline and constrained GNN models."""
+
 import argparse
 import os
 import csv
@@ -11,12 +13,12 @@ from torch import nn
 from functools import partial
 
 # user-defined modules
-from attacks.pgd import pgd
-from attacks.apgd import apgd
-from model import GraphNN
-from utils import update_parameters, get_Lips_constant_upper, load_dataset
-from attacks.utils import run_attack, compute_attack_metrics
-from train_model_utils import test_one_epoch
+from lipschitz_gnn.attacks.pgd import pgd
+from lipschitz_gnn.attacks.apgd import apgd
+from lipschitz_gnn.models import GraphNN
+from lipschitz_gnn.utils import update_parameters, get_Lips_constant_upper, load_dataset
+from lipschitz_gnn.attacks.utils import run_attack, compute_attack_metrics
+from lipschitz_gnn.training import test_one_epoch
 
 
 lip_ct       = [30, 28, 26, 24, 20, 18, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0.5]

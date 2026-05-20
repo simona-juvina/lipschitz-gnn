@@ -1,11 +1,13 @@
+"""Train baseline and Lipschitz-constrained GNN models."""
+
 import argparse
 import torch
 import os
 from torch import nn
 
 # user-defined modules
-from utils import update_parameters, load_dataset
-from train_model_utils import train_test_model    
+from lipschitz_gnn.utils import update_parameters, load_dataset
+from lipschitz_gnn.training import train_test_model    
     
 optimizers    = ('adam', 'sgd')
 datasets      = ('FacebookPagePage', 'GitHub', 'DeezerEurope', 'LastFMAsia')

@@ -1,4 +1,6 @@
 # Adapted from https://github.com/fra31/auto-attack
+"""Auto-PGD attacks adapted for graph node-classification models."""
+
 import math
 import numbers
 from functools import partial
@@ -7,7 +9,7 @@ import torch
 import torch_geometric
 from torch import nn, Tensor
 from torch.nn import functional as F
-from adv_lib.utils.losses import difference_of_logits_ratio,difference_of_logits
+from adv_lib.utils.losses import difference_of_logits, difference_of_logits_ratio
 from deeprobust.graph.defense import GCNJaccard, GCNSVD, GCN, RGCN
 
 
@@ -240,4 +242,3 @@ def _apgd(model: nn.Module,
             counter3 = 0
 
     return adv_percent, x_best_adv
-

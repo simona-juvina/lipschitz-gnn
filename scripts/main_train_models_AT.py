@@ -1,3 +1,5 @@
+"""Train adversarially trained GNN models."""
+
 import argparse
 import os
 import torch
@@ -7,12 +9,12 @@ from torch import nn
 from functools import partial
 
 # user-defined modules
-from attacks.pgd import pgd
-from attacks.apgd import apgd
-from model import GraphNN
-from utils import load_dataset
-from attacks.utils import run_attack
-from train_model_utils import train_test_model
+from lipschitz_gnn.attacks.pgd import pgd
+from lipschitz_gnn.attacks.apgd import apgd
+from lipschitz_gnn.models import GraphNN
+from lipschitz_gnn.utils import load_dataset
+from lipschitz_gnn.attacks.utils import run_attack
+from lipschitz_gnn.training import train_test_model
 
 
 optimizers    = ('adam', 'sgd')

@@ -1,3 +1,5 @@
+"""Projected-gradient attacks adapted for graph node-classification models."""
+
 import torch
 import torch_geometric
 from functools import partial
@@ -125,5 +127,4 @@ def _pgd(model: nn.Module,
                 δ.data.unsqueeze(0).renorm_(p=2, dim=0, maxnorm=ε)
 
     return best_percent, best_adv
-
 

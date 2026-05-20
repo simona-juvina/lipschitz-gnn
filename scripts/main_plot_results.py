@@ -1,9 +1,11 @@
+"""Plot experiment results from saved CSV files."""
+
 import argparse
 import os
 from pathlib import Path
 
 # user-defined modules
-from plot_utils import plot_results_robustness, plot_results_attacks, plot_results_sn, plot_results_graph_defenses, plot_results_lipschitz
+from lipschitz_gnn.plotting import plot_results_robustness, plot_results_attacks, plot_results_sn, plot_results_graph_defenses, plot_results_lipschitz
 
                         
 datasets   = ('FacebookPagePage', 'GitHub', 'LastFMAsia', 'DeezerEurope', None)

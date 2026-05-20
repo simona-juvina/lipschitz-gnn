@@ -1,5 +1,8 @@
+"""Evaluate robustness for adversarially trained GNN models."""
+
 import argparse
-import os, csv
+import csv
+import os
 import numpy as np
 import pandas as pd
 import torch
@@ -11,12 +14,11 @@ from functools import partial
 from adv_lib.utils import requires_grad_
 
 # user-defined modules
-from attacks.pgd import pgd
-from attacks.apgd import apgd
-from attacks.utils import compute_attack_metrics, run_attack
-from model import GraphNN
-from utils import load_dataset
-from attacks.utils import run_attack, compute_attack_metrics, print_metrics
+from lipschitz_gnn.attacks.pgd import pgd
+from lipschitz_gnn.attacks.apgd import apgd
+from lipschitz_gnn.attacks.utils import compute_attack_metrics, print_metrics, run_attack
+from lipschitz_gnn.models import GraphNN
+from lipschitz_gnn.utils import load_dataset
 
 
 datasets    = ('FacebookPagePage', 'GitHub', 'LastFMAsia', 'DeezerEurope')

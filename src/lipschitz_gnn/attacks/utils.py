@@ -1,3 +1,5 @@
+"""Attack execution and metric utilities."""
+
 import numpy as np
 import torch
 import torch_geometric

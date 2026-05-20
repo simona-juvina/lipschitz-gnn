@@ -1,3 +1,5 @@
+"""Shared data, metrics, serialization, and Lipschitz helper functions."""
+
 import matplotlib.pyplot as plt
 import pickle
 import numpy as np
@@ -5,7 +7,7 @@ import pandas as pd
 import torch
 import torchmetrics
 import sklearn
-import sklearn.model_selection 
+import sklearn.model_selection
 import torch_geometric.transforms as T
 import torch_geometric
 from torch_geometric.datasets import GitHub, FacebookPagePage, DeezerEurope, LastFMAsia

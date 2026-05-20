@@ -5,14 +5,23 @@ channels:
   - nvidia
   - defaults
 dependencies:
-  - pyg=2.2.0=py310_torch_1.13.0_cu117
   - python=3.10
+  - pytorch=1.13.*
   - pytorch-cuda=11.7=h67b0de4_0
   - torchvision=0.14.0=py310_cu117
+  - pyg=2.2.0=py310_torch_1.13.0_cu117
+  - pytorch-scatter
+  - matplotlib
+  - networkx
+  - numpy
+  - pandas
+  - scikit-learn
+  - scipy
+  - seaborn
   - pip:
     - cupy-cuda117
+    - deeprobust
     - git+https://github.com/jeromerony/adversarial-library
-    - matplotlib
-    - networkx
     - pynvml
     - torchmetrics==0.10
+    - -e .

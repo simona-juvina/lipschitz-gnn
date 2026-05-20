@@ -1,3 +1,5 @@
+"""Training and evaluation loops for graph neural network experiments."""
+
 import time
 import numpy as np
 import torch
@@ -7,17 +9,17 @@ from pathlib import Path
 from typing import Optional, Tuple, Any, List, Dict, Union
 
 # user-defined modules
-from utils import calculate_metrics_torch, get_Lips_constant, get_Lips_constant_upper, dump_object, load_object
-from plot_utils import plot_history
-from early_stopping import EarlyStopping
-from constraint import Constraint_SAGE, Constraint_GCN
-from model import GraphNN
+from lipschitz_gnn.utils import calculate_metrics_torch, get_Lips_constant, get_Lips_constant_upper, dump_object, load_object
+from lipschitz_gnn.plotting import plot_history
+from lipschitz_gnn.early_stopping import EarlyStopping
+from lipschitz_gnn.constraints import ConstraintGCN, ConstraintSAGE
+from lipschitz_gnn.models import GraphNN
 
     
 def train_one_epoch(data: torch_geometric.data.data.Data,
                     model: torch.nn.Module,
                     optimizer: torch.optim.Optimizer,
-                    constraint: Union[Constraint_SAGE,Constraint_GCN],
+                    constraint: Union[ConstraintSAGE, ConstraintGCN],
                     num_classes: int, 
                     device: torch.device,
                     epoch: int, 
@@ -125,7 +127,7 @@ def test_one_epoch(data: torch_geometric.data.data.Data,
 def train_model(data: torch_geometric.data.data.Data,
                 model: torch.nn.Module, 
                 config_params: Dict[str, Any], 
-                constraint: Union[Constraint_SAGE,Constraint_GCN], 
+                constraint: Union[ConstraintSAGE, ConstraintGCN],
                 num_classes: int) -> Tuple:
     """Train the model.
 
@@ -283,10 +285,10 @@ def train_test_model(dataset: torch_geometric.data.data.Data,
 
     # Constraint
     if network_type == 'sage':
-        constr = Constraint_SAGE(model, config_params, device=device,
+        constr = ConstraintSAGE(model, config_params, device=device,
                                  with_constraint=config_params['with_constraint'], constraint_type=config_params['constraint_type'])
     elif network_type == 'gcn':
-        constr = Constraint_GCN(model, config_params, device=device,
+        constr = ConstraintGCN(model, config_params, device=device,
                                 with_constraint=config_params['with_constraint'], constraint_type=config_params['constraint_type'])
 
     # Loss and optimization function

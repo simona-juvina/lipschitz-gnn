@@ -1,3 +1,5 @@
+"""Evaluate robustness for randomized smoothing GNN models."""
+
 import argparse
 import os
 import csv
@@ -9,11 +11,11 @@ from torch import nn
 from functools import partial
 
 # user-defined modules
-from attacks.pgd import pgd
-from attacks.apgd import apgd
-from attacks.utils import run_attack
-from model import GraphNN
-from utils import load_dataset, Smooth, calculate_metrics_torch
+from lipschitz_gnn.attacks.pgd import pgd
+from lipschitz_gnn.attacks.apgd import apgd
+from lipschitz_gnn.attacks.utils import run_attack
+from lipschitz_gnn.models import GraphNN
+from lipschitz_gnn.utils import load_dataset, Smooth, calculate_metrics_torch
 
 
 sigmas    = (0.1, 0.25, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.2, 1.4, 1.6, 1.8, 2)   

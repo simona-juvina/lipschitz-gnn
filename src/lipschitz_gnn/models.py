@@ -1,3 +1,5 @@
+"""Graph neural network layers and model definitions."""
+
 import torch
 import torch_geometric
 from torch import Tensor, nn
